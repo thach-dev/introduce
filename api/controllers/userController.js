@@ -1,3 +1,5 @@
+// api/controllers/userController.js
+
 const userModel = require('../models/userModel')
 
 const getUsers = async (req, res) => {
@@ -12,14 +14,29 @@ const getUsers = async (req, res) => {
   res.json(data)
 }
 
+const getUserByMSSV = async (req, res) => {
+  const { mssv } = req.params
+
+  const { data, error } = await userModel.getUserByMSSV(mssv)
+
+  if (error) {
+    return res.status(500).json({
+      error: error.message,
+    })
+  }
+
+  res.json(data)
+}
+
 const addUser = async (req, res) => {
-  const { name, age, school, hometown } = req.body
+  const { name, age, school, hometown, mssv } = req.body
 
   const { data, error } = await userModel.createUser({
     name,
     age,
     school,
     hometown,
+    mssv,
   })
 
   if (error) {
@@ -29,47 +46,10 @@ const addUser = async (req, res) => {
   }
 
   res.json(data)
-}
-
-const editUser = async (req, res) => {
-  const { id } = req.params
-  const { name, age, school, hometown } = req.body
-
-  const { data, error } = await userModel.updateUser(id, {
-    name,
-    age,
-    school,
-    hometown,
-  })
-
-  if (error) {
-    return res.status(500).json({
-      error: error.message,
-    })
-  }
-
-  res.json(data)
-}
-
-const removeUser = async (req, res) => {
-  const { id } = req.params
-
-  const { error } = await userModel.deleteUser(id)
-
-  if (error) {
-    return res.status(500).json({
-      error: error.message,
-    })
-  }
-
-  res.json({
-    message: 'Xóa user thành công',
-  })
 }
 
 module.exports = {
   getUsers,
+  getUserByMSSV,
   addUser,
-  editUser,
-  removeUser,
 }
