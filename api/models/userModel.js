@@ -9,11 +9,14 @@ const getAllUsers = async () => {
 }
 
 const getUserByMSSV = async (mssv) => {
-  return await supabase
+  const { data, error } = await supabase
     .from('users')
     .select('*')
     .eq('MSSV', mssv)
-    .single()
+
+  if (error) return { data: null, error }
+
+  return { data: data?.[0] || null, error: null }
 }
 
 const createUser = async (userData) => {
