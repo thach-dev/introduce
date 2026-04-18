@@ -12,7 +12,7 @@ const getUserByMSSV = async (mssv) => {
   return await supabase
     .from('users')
     .select('*')
-    .eq('mssv', mssv)
+    .eq('MSSV', mssv)
     .single()
 }
 
